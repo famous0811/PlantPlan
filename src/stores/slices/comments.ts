@@ -3,20 +3,21 @@ import { createSlice,PayloadAction } from "@reduxjs/toolkit"
 // let Id=0;
 
 interface CommentType {
-    writeId: number | null;
-    who: string | null;
-    text: string | null;
+    writeId: number;
+    who: string;
+    text: string;
 }
 
-const initialState: Array<CommentType> = []
+const initialState: Array<CommentType> = [];
 
 const commentslice = createSlice({
-    name: "comment",
+    name: "commentSlice",
     initialState,
     reducers: {
-        createComment(state, action: PayloadAction<{ writeid: number,who:string,text:string}>){
-            const {writeid,who,text} = action.payload
-            state.push({writeId:writeid,who,text})
+        createComment(state, action: PayloadAction<{writeid:number,who:string,text:string}>){
+            const {writeid,who,text} = action.payload      
+            state.push({writeId:writeid,who:who,text:text})
+            
         }
     }
 })

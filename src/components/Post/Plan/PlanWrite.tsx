@@ -23,9 +23,9 @@ function PlanWrite() {
     const [visible,SetVisible]=useState(false);//공유창 나오게 하기
     const [categories,setCategories]=useState<categoryType[]>();
 
-    useEffect(()=>{
-        setTitle("오늘의 일지("+((new Date()).getMonth()+1)+"/"+(new Date()).getDate()+")");
-    },[])
+    // useEffect(()=>{
+    //     setTitle("오늘의 일지("+((new Date()).getMonth()+1)+"/"+(new Date()).getDate()+")");
+    // },[])
     
     function myImage() {
         const image: HTMLInputElement = document.getElementById("bin") as HTMLInputElement
@@ -44,7 +44,7 @@ function PlanWrite() {
     
       //공유버튼
     function save(share:boolean) {
-        Writed.Write({show:share,title,content,category:categories ? categories : null,somthing:true,picture:mainimg})
+        Writed.Write({show:share,title:title+"("+((new Date()).getMonth()+1)+"/"+(new Date()).getDate()+")",content,category:categories ? categories : null,somthing:true,picture:mainimg})
         history.push("/")
     }
 
@@ -75,7 +75,7 @@ function PlanWrite() {
                             style={{ display: "none" }}/>
                     </label>
 
-                    <Input type="text" placeholder="제목(4~20)"></Input>
+                    <Input type="text" placeholder="제목(4~20)" value={title} onChange={e=>setTitle(e.currentTarget.value)}></Input>
                     <EditorTag id="categoris">
                         <Input type="text" placeholder="카테고리 추가" onKeyPress={CategoriEnter}></Input>
                         <Categori category={categories ? categories : null}/>

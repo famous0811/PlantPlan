@@ -5,13 +5,20 @@ import { useLocation } from "react-router-dom"
 import Input from "../Form/Input";
 import { useSelector} from "react-redux";
 import {ReduxState} from "../../stores/reducers"
+import useComponent from "../../hooks/useComments"
+
 
 function PostRead() {
     const [comment,setcomment]=useState("")
 
-    const [ReadData,SetReadData]=useState(useSelector((state : ReduxState)=>state.WriteSlice))
+    const ReadData=useSelector((state : ReduxState)=>state.WriteSlice)
+    const Users=useState(useSelector((state : ReduxState)=>state.UserSlice))
+    const Comments=useState(useSelector((state : ReduxState)=>state.commentSlice))
+    // const UserId=Users.map(data =>{data.UserId});
+    // console.log(Users);
     
-    
+    const UseComponent=useComponent()
+
     const location = useLocation()
     const list=location.pathname.split("/")
     const writeId=Number.parseInt(list[3]);
@@ -22,20 +29,20 @@ function PostRead() {
     function ComentEnter(e:any) {
         if(e.key=="Enter"){
             AddComent();
+            setcomment("")
         }
     }
-
     function AddComent(){
-
+        UseComponent.comments(writeId,"allblack",comment)
     }
-
+    console.log(Comments);
     return (
         <>
             <Wrap>
                 {
                     ReadData.map(data=>(
                         data.id===writeId ? 
-                        <Reads title={data.title} contents={data.content}image={data.picture ? data.picture : ""} category={data.category ? data.category : []} comments={comment} ComentEnter={ComentEnter} Setcomment={setcomment}/>
+                        <Reads title={data.title} contents={data.content}image={data.picture ? data.picture : ""} category={data.category ? data.category : []} comment={comment} ComentEnter={ComentEnter} Setcomment={setcomment} comments={Comments}/>
                          : ""))
                 }
             </Wrap>
@@ -47,18 +54,20 @@ interface PostShowinterface{
     contents: string;
     image: string;
     category: any[];
-    comments: string;
+    comment: string;
+    comments: any[];
     ComentEnter: (e:any)=>void;
     Setcomment: (e:string)=>void;
 }
 
-function Reads({title,contents,image,category,comments,ComentEnter,Setcomment}:PostShowinterface){
+function Reads({title,contents,image,category,comment,ComentEnter,Setcomment,comments}:PostShowinterface){
     
     useEffect(()=>{
+        // console.log(image);
         const image_section: HTMLImageElement = document.getElementById("image_plan") as HTMLImageElement
-        image_section.src = "../../assets/test1.png";
+        image_section.src = image;
     },[])
-
+    // console.log(comments);
     return(
         <div>
             <Title>{title}</Title>
@@ -70,7 +79,7 @@ function Reads({title,contents,image,category,comments,ComentEnter,Setcomment}:P
             </div>
 
             <div>
-                <img id="image_plan" alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }} src="../../assets/test1.png"/>
+                <img id="image_plan" alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }}/>
             </div>
             
             <Content>
@@ -79,32 +88,29 @@ function Reads({title,contents,image,category,comments,ComentEnter,Setcomment}:P
 
             <Title style={{display:"flex",width:"100%",fontSize:"18px",height:"auto"}}>댓글</Title>
             <ComponentWrite>
-                {/* <Components/>
-                <Components/>
-                <Components/>
-                <Components/>
-                <Components/>
-                <Components/>
-                <Components/>
-                <Components/> */}
+                {comments.map((data)=>{
+                    // console.log(data);
+                    
+                //    <Components key={data.writeId} userId={data.who} comments={data.text}></Components>
+                })}
             </ComponentWrite>
             <Input style={{borderRadius:"20px"}} placeholder="댓글을 입력하세요!" onChange={e=>{
                         Setcomment(e.target.value)
                     }}
-                    value={comments}
+                    value={comment}
                     onKeyPress={ComentEnter}/>
         </div>
     )
 }
 
-function Components(usrId: string,comments:string){
+function Components(usrId:string,comments:string) {
     return(
         <ComponentsWrap>
         <img src={require("../../assets/test1.png")} alt="usericon" width="30px" height="30px" style={{ objectFit: "cover", objectPosition: "50% 50%",borderRadius:"20px",marginRight:"10px"}} />
             <div style={{display:"flex",flexDirection: "row", alignItems: "center",width: "100%"}}>
                 <Component>
-                    <div>유명환</div>
-                    <div>이건 삽버그인뎅</div>
+                    <div>{usrId}</div>
+                    <div>{comments}</div>
                 </Component>
             </div>
         </ComponentsWrap>
@@ -156,7 +162,8 @@ const Category=styled.div`
     height:30px;
     border:1px solid #AAEBAA;
     border-radius:20px;
-    margin:0px 2px;
+    margin:0px 10px;
+    padding:10px;
     display: flex;
     justify-content:center;
     align-items:center;

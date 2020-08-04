@@ -11,7 +11,7 @@ interface userSlice {
 const initialState: Array<userSlice> = [];
 
 const userSlice = createSlice({
-    name: "User",
+    name: "UserSlice",
     initialState,
     reducers: {
         siginUp(state, action:PayloadAction<{id:string;password:string;nickname:string;email:string;}>) {

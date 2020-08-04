@@ -11,7 +11,7 @@ function useComponent(){
         }))
     },[dispatch])
 
-    return comments;
+    return {comments};
 }
 
 export default useComponent;
