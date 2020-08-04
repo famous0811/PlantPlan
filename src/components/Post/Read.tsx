@@ -3,24 +3,25 @@ import styled from 'styled-components';
 
 interface ReadDataProps{ 
     title: string;
-    img: string;
+    img: string | null;
     content: string;
-    categories: any[];
+    categories: any[] | null;
+    onClick:()=>void;
 }
-function Read({title,content,img,categories}:ReadDataProps) {
+function Read({title,content,img,categories,onClick}:ReadDataProps) {
     return (
-        <Wrap>
+        <Wrap onClick={onClick}>
             <div style={{display:"flex",flexDirection: "row", alignItems: "center"}}>
                 <TitleImg>
-                    <img src={img} alt=""/>
+                    {img ? <img src={img} alt=""/> : ""}
                 </TitleImg>
                 <Title>{title}</Title>
             </div>
             <Content>{content}</Content>
             <div style={{display:"flex",flexDirection: "row", alignItems: "center"}}>
-                {categories.map((data)=>{
+                {categories ? categories.map((data)=>{
                    return <Category key={data.key}>{data.text}</Category>
-                })}
+                }) : ""}
             </div>
         </Wrap>
     );

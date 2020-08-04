@@ -1,18 +1,32 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import styled from 'styled-components';
 import Input from "../../Form/Input"
 import Modal from "../../Form/Modal"
 import {useHistory} from "react-router-dom";
 import Categori from "../categori";
+import useWrite from "../../../hooks/useWrite";
 
-let len=2;
+let len=1;
+
+export interface categoryType{
+    id:number;
+    text:string;
+}
 
 function PlanWrite() {    
     const history =useHistory();
-    const [mainimg,SetMainImg]=useState(false);
-    const [visible,SetVisible]=useState(false);
-    const [categories,setCategories]=useState([{id:1,text:"#test"}]);
+    const Writed = useWrite();
 
+    const [title,setTitle]=useState("");
+    const [content,setContent]=useState("");
+    const [mainimg,SetMainImg]=useState("");
+    const [visible,SetVisible]=useState(false);//공유창 나오게 하기
+    const [categories,setCategories]=useState<categoryType[]>();
+
+    useEffect(()=>{
+        setTitle("오늘의 일지("+((new Date()).getMonth()+1)+"/"+(new Date()).getDate()+")");
+    },[])
+    
     function myImage() {
         const image: HTMLInputElement = document.getElementById("bin") as HTMLInputElement
         //input tag
@@ -22,25 +36,27 @@ function PlanWrite() {
           const reader = new FileReader()
           reader.onload = function(e?: any) {
             image_section.src = e.target.result
-            SetMainImg(!mainimg);
+            SetMainImg(e.target.result);
           }
           reader.readAsDataURL(image.files![0])
         }
       }
+    
       //공유버튼
     function save(share:boolean) {
+        Writed.Write({show:share,title,content,category:categories ? categories : null,somthing:true,picture:mainimg})
         history.push("/")
     }
+
     function CategoriEnter(e:any) {
         if(e.key=="Enter" && e.target.value){
             if(e.target.value[0]!="#")
                 e.target.value="#"+e.target.value
 
-            setCategories(categories.concat({id:len++,text:e.target.value}))
+            setCategories(categories ? categories.concat({id:len++,text:e.target.value}) : [{id:len++,text:e.target.value}])
             e.target.value=""
         }
     }
-
 
     return (
         <>
@@ -58,15 +74,20 @@ function PlanWrite() {
                             }}
                             style={{ display: "none" }}/>
                     </label>
+
                     <Input type="text" placeholder="제목(4~20)"></Input>
                     <EditorTag id="categoris">
                         <Input type="text" placeholder="카테고리 추가" onKeyPress={CategoriEnter}></Input>
-                        <Categori category={categories}/>
+                        <Categori category={categories ? categories : null}/>
                     </EditorTag>
                     
                     <MainContent>
-                        <TitleImg mainimg={mainimg} alt="식물상태" style={{ borderRadius: "20px", objectFit: "cover"}} id="image_plan" />
-                        <Contents placeholder="내용"></Contents>
+                        <TitleImg mainimg={mainimg!=""} alt="식물상태" style={{ borderRadius: "20px", objectFit: "cover"}} id="image_plan" />
+                        <Contents placeholder="내용" onChange={
+                            e=>{
+                                setContent(e.target.value);
+                            }
+                        }></Contents>
                     </MainContent>
                 </div>
                 <Button onClick={()=>SetVisible(!visible)} style={{marginBottom:"10%"}}>저장</Button>

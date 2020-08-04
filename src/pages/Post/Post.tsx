@@ -11,7 +11,7 @@ function Post() {
                 <link rel="apple-touch-icon" href="/favicon2x.png" />
                 <title>{"게시판"}</title>
             </Helmet>
-            <Postwrap></Postwrap>
+            <Postwrap expansion={true}></Postwrap>
         </>
     );
 }

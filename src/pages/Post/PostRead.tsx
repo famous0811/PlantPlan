@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from "react-helmet";
+import PostReadWrap from "../../components/Post/PostRead";
 
 function PostRead() {
     return (
@@ -9,8 +10,9 @@ function PostRead() {
                 <link rel="icon" href="/favicon2x.png" />
                 <meta name="description" content="UniFarm" />
                 <link rel="apple-touch-icon" href="/favicon2x.png" />
-                <title>{"PostRead"}</title>
+                <title>{"질문"}</title>
             </Helmet>
+            <PostReadWrap></PostReadWrap>
         </>
     );
 }

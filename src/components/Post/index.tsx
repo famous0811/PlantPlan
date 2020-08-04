@@ -1,19 +1,34 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import styled from 'styled-components';
 import Input from "../Form/Input"
 import {useHistory} from 'react-router-dom'
-import Question from "./question/QuestionRead";
-import Plan from "./Plan/PlanRead";
+import useRead from "../../hooks/useRead";
+import Read from './Read';
+import { useSelector} from "react-redux";
+import {ReduxState} from "../../stores/reducers"
 
+interface PostIndex{
+    expansion:boolean
+}
 
-function Index() {
-    const [whatpost,SetWhatPost]=useState("plan");
-    const [SearchResult,Setresult]=useState("test");
+function Index({expansion}:PostIndex) {
+    const [whatpost,SetWhatPost]=useState(true);
+    const [SearchResult,Setresult]=useState("");
+
+    const [ReadData,SetReadData]=useState(useSelector((state : ReduxState)=>state.WriteSlice))
+    
     const history=useHistory();
+    const UseRead=useRead();
+
+    useEffect(()=>{
+        UseRead.Read(whatpost)
+        Setresult("")
+    },[whatpost])
 
     function SelectData(){
-
+        UseRead.Find(SearchResult,whatpost)
     }
+
     function SelectEnter(e:any) {
         if(e.key=="Enter"){
             SelectData();   
@@ -23,37 +38,50 @@ function Index() {
     function WritePlant(){
         history.push("/writequestion")
     }
+
+    function PostPage(){
+        history.push("/post");
+    }
+    
     return (
-        <Wrap>
+        <Wrap expansion={expansion}>
             <div>
                 <div>
                     <TitleWrap>
                         <Title>게시판</Title>
                         <div style={{display:"flex",flexDirection: "row", alignItems: "center", height:"30px"}}>
-                            <Input type="text"style={{height:"100%",borderRadius:"0px"}} onChange={e=>{Setresult(e.target.value)}} onKeyPress={SelectEnter}/>
+                            <Input type="text"style={{height:"100%",borderRadius:"0px"}} value={SearchResult} onChange={e=>{Setresult(e.target.value)}} onKeyPress={SelectEnter}/>
                             <Button style={{borderRadius:"0px",borderColor:"#cecece"}} onClick={SelectData}>검색</Button>
                         </div>
+
                         <div style={{display:"flex",flexDirection: "row", alignItems: "center" }}>
                             <Titleselect name="whatpost" onChange={e =>{
-                                SetWhatPost(e.target.value);
+                                SetWhatPost(e.target.value=="plan");
                             }}>
                                 <option value="plan">일지</option>
                                 <option value="question">질문</option>
                             </Titleselect>
                             <Button style={{borderColor:"#999"}} onClick={WritePlant}>글쓰기</Button>
+                            {
+                                expansion ? "":<Button style={{borderColor:"#999",marginLeft:"2%"}} onClick={PostPage}>더보기</Button>
+                            }
                         </div>
                     </TitleWrap>
                     <TitleLine>
-                        {whatpost=="plan" ? <Plan search={SearchResult}/> : <Question search={SearchResult}/>}
+                        {ReadData.length ? ReadData.map(data =>data.show && data.somthing==whatpost ?
+                        <Read title={data.title} content={data.content} img={data.picture} categories={data.category} onClick={()=>{ history.push("/PostRead/"+(data.somthing ? 1 : 2)+"/"+data.id.toString())}}/> 
+                        : "") : <div style={{display: "flex", width: '100%',alignItems: "center",justifyContent:"center"}}>
+                        <div style={{fontSize:"20px"}}>결과가 없습니다.</div>
+                    </div>}
                     </TitleLine>
                 </div>
             </div>
         </Wrap>
     );
 }
-const Wrap = styled.div`
+const Wrap = styled.div<PostIndex>`
   width: 100%;
-  padding: 0% 5%;
+  padding: ${({expansion}) => (expansion ? '0% 5%' : '0% 0%')};
   & > div {
     max-width: 1300px;
     display: flex;
@@ -108,6 +136,7 @@ const TitleLine= styled.div`
     border-top:1.5px solid black;
     margin-top: 5px;
     display: flex;
+    flex-direction: column;
 `
 
 const Button=styled.div`

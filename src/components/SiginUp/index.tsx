@@ -26,7 +26,7 @@ function Index() {
         }
       }
     function signUpEnter(e:any) {
-        if(e.key="Enter"){
+        if(e.key=="Enter"){
             SignUp();   
         }
 

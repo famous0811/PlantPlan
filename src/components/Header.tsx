@@ -59,7 +59,7 @@ const Wrap=styled.div`
     width:100%;
     height:60px;
     padding: 0% 5%;
-    z-index:1;
+    z-index:100;
     background-color:#66EC66;
     position:sticky;
     top:0px;
@@ -88,6 +88,7 @@ const HeaderRight=styled.div`
 const Title=styled.div`
     font-size:28px;
     font-weight:bold;
+    cursor: pointer;
 `
 
 const Menu=styled.ul`
@@ -99,6 +100,7 @@ const Menu=styled.ul`
         margin:0px 4px;
         text-align:center;
         width:80px;
+        cursor: pointer;
     }
 `;
 
@@ -114,6 +116,7 @@ const Button=styled.div`
     font-weight:bold;
     border-radius:20px;
     margin:0 5px;
+    cursor: pointer;
 `;
 const TitleLine= styled.div`
     width: 100%;
@@ -123,4 +126,5 @@ const TitleLine= styled.div`
     display: flex;
     flex-direction: column;
 `
+
 export default Header;

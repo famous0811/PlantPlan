@@ -5,7 +5,7 @@ interface ReadDataProps{
     // title: string;
     // img: string;
     // content: string;
-    category: any[];
+    category: any[] | null;
 }
 
 function Categori({category}:ReadDataProps) {
@@ -18,11 +18,11 @@ function Categori({category}:ReadDataProps) {
     }
     return (
         <div style={{display:"flex",flexDirection: "row", alignItems: "center",overflow:"hidden"}} className="categoris">
-                {category.map((data)=>{
+                {category ? category.map((data)=>{
                     // setid(data.id)
                    return <Category key={data.key}>{data.text}<DeleteButton onClick={test}/>
                    </Category>
-                })}
+                }) : ""}
         </div>
     );
 }

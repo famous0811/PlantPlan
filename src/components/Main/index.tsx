@@ -1,8 +1,7 @@
 import React from 'react';
 import Swiper from 'react-id-swiper';
-// import 'swiper/css/swiper.css';
 import styled from 'styled-components';
-
+import Post from '../Post/index'
 function Index() {
     const params = {
         autoplay: {
@@ -15,33 +14,26 @@ function Index() {
         },
         scrollbar: {
           el: ".swiper-scrollbar",
-          hide: false
+          hide: true
         }
       }
       return (
         <Wrap>
           <div>
             <Swiper {...params}>
-              <SwiperItem>
-                <img src={require("../../assets/swiper__one.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }} />
-                <SwiperText>토트넘 일정 변경</SwiperText>
-                <SwiperShadow></SwiperShadow>
-              </SwiperItem>
-              <SwiperItem>
-                <img src={require("../../assets/swiper__two.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 0%" }} />
-                <SwiperText>2월 22일 토트넘VS첼시</SwiperText>
-                <SwiperShadow></SwiperShadow>
-              </SwiperItem>
-              <SwiperItem>
-                <img src={require("../../assets/swiper__three.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 0%" }} />
-                <SwiperText>토트넘 챔스 16강 0:1 패배</SwiperText>
-                <SwiperShadow></SwiperShadow>
-              </SwiperItem>
+              <SwiperChild>
+              <img src={require("../../assets/test1.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }} />  
+              </SwiperChild>
+              <SwiperChild>
+              <img src={require("../../assets/test2.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }} />
+              </SwiperChild>
+              <SwiperChild>
+              <img src={require("../../assets/test3.png")} alt="swiper1" width="100%" height="100%" style={{ objectFit: "cover", objectPosition: "50% 50%" }} />
+              </SwiperChild>
             </Swiper>
-            {/* <Text style={{ width: "100%", display: "flex" }}>
-              <Post expansion={false}></Post>
-              <Chat></Chat>
-            </Text> */}
+          </div>
+          <div>
+            <Post expansion={false}/>
           </div>
         </Wrap>
       )
@@ -54,9 +46,8 @@ const Wrap = styled.div`
   & > div {
     max-width: 1300px;
     display: flex;
-    justify-content: center;
+     justify-content: center;
     align-items: center;
-    flex-direction: column;
     margin: 0px auto;
     & > *:nth-child(1) {
       margin: 55px 0px;
@@ -64,6 +55,12 @@ const Wrap = styled.div`
     }
   }
 `
+const SwiperChild=styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: rgba(0, 0, 0);
+`;
 const SwiperItem = styled.div`
   width: 100%;
   height: 100%;
@@ -84,7 +81,6 @@ const SwiperText = styled.div`
   left: 0;
   right: 0;
   font-size: 36px;
-  z-index: 100;
   text-align: center;
   color: white;
   word-break: keep-all;
